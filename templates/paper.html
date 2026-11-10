@@ -1,0 +1,11 @@
+<!doctype html><html lang="{{ 'en' if p._original_view else 'zh-CN' }}"><head><meta charset="utf-8"><style>{{ css|safe }}</style><style>{{ katex_css|safe }}</style></head>
+{% macro prose(value) %}{% for is_code, block in statement_blocks(value) %}{% if is_code %}<pre>{{ block }}</pre>{% elif block.strip() %}<div class="prose">{{ block.strip() }}</div>{% endif %}{% endfor %}{% endmacro %}
+<body><main>{% if not compact %}<div class="label">{{ 'Kouhu judge' if p._original_view else '口胡判题' }} · {{ ('Examples' if samples_page else 'Statement') if p._original_view else ('样例与说明' if samples_page else '题面') }}</div>{% endif %}
+<h1>{{ p.title }}</h1><div class="meta">{{ p.problem_id }}{% if p.time_limit %} · {{ p.time_limit }}{% endif %}{% if p.memory_limit %} · {{ p.memory_limit }}{% endif %}</div>
+{% if p._translation == 'original-fallback' %}<div class="warning">翻译暂不可用，以下保留原文。</div>{% endif %}
+{% if not samples_page %}{% if p._objective %}<h2>目标</h2>{{ prose(p._objective) }}{% endif %}<h2>{{ 'Problem statement' if p._original_view else '题目描述' }}</h2>{{ prose(p.statement) }}
+{% if p.constraints %}<h2>{{ 'Constraints' if p._original_view else '数据范围' }}</h2>{{ prose(p.constraints) }}{% endif %}
+<h2>{{ 'Input' if p._original_view else '输入格式' }}</h2>{{ prose(p.input_spec) }}<h2>{{ 'Output' if p._original_view else '输出格式' }}</h2>{{ prose(p.output_spec) }}
+{% else %}<h2>{{ 'Examples and explanations' if p._original_view else '样例与说明' }}</h2>{% for s in p.samples %}<h3>{{ 'Sample' if p._original_view else '样例' }} {{ loop.index }} · {{ 'Input' if p._original_view else '输入' }}</h3><pre>{{ s.input }}</pre><h3>{{ 'Sample' if p._original_view else '样例' }} {{ loop.index }} · {{ 'Output' if p._original_view else '输出' }}</h3><pre>{{ s.output }}</pre>{% if s.explanation %}<h3>{{ 'Explanation' if p._original_view else '说明' }}</h3>{{ prose(s.explanation) }}{% endif %}{% endfor %}{% endif %}
+<footer>{{ 'Source: ' if p._original_view else '来源：' }}{{ p.url }}{% if not compact %}<br>{{ 'Original statement and samples' if p._original_view else '题面与样例据原始题目整理 · 翻译仅供阅读，以原题为准' }}{% endif %}</footer></main>
+<script>{{ katex_js|safe }}</script><script>{{ auto_render_js|safe }}</script><script>{{ math_js|safe }}</script></body></html>

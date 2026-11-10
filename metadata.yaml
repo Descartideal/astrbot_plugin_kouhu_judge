@@ -1,0 +1,19 @@
+name: astrbot_plugin_kouhu_judge
+display_name: 口胡判题
+short_desc: 在 QQ 群里开算法题，讲思路、抢首杀
+desc: |
+  在群里一起做 Codeforces、AtCoder 题，也能在私聊练习。
+  中文题面和样例生成图片，保留公式与伪代码。
+  用自然语言或代码提交，获得针对关键步骤的反馈。
+  支持群聊首杀、排行榜、历史题补交与下一题预备。
+version: 1.2.6
+author: Descartideal
+repo: https://github.com/Descartideal/astrbot_plugin_kouhu_judge
+astrbot_version: ">=4.28.1"
+support_platforms:
+  - aiocqhttp
+tags:
+  - 算法竞赛
+  - Codeforces
+  - AtCoder
+  - 群聊游戏

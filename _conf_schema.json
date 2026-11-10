@@ -1,0 +1,368 @@
+{
+  "enabled_groups": {
+    "description": "启用群白名单，完整格式 平台ID:GroupMessage:群号；空列表不启用任何群",
+    "type": "list",
+    "default": []
+  },
+  "private_enabled": {
+    "description": "private_enabled",
+    "type": "bool",
+    "default": true
+  },
+  "bare_commands": {
+    "description": "支持直接 new / cur / submit 等，无需斜杠（默认开启）",
+    "type": "bool",
+    "default": true
+  },
+  "direct_code": {
+    "description": "direct_code",
+    "type": "bool",
+    "default": true
+  },
+  "private_generic_commands": {
+    "description": "私聊接管 help/ping/clear，默认关闭，请使用 /kh help",
+    "type": "bool",
+    "default": false
+  },
+  "judge_provider": {
+    "description": "未填专用 Key 时的判题 Provider ID；留空跟随当前会话主模型",
+    "type": "string",
+    "default": ""
+  },
+  "translation_provider": {
+    "description": "指定翻译 AstrBot Provider ID（最高优先级）；留空则优先插件独立 API，未配置时跟随主会话",
+    "type": "string",
+    "default": ""
+  },
+  "translation_attempts": {
+    "description": "每次生成中文题面最多尝试次数（包括首次），默认 3，范围 3..10；遇到校验错误携带修正反馈重试",
+    "type": "int",
+    "default": 3
+  },
+  "translation_use_dedicated": {
+    "description": "优先使用插件独立 API 翻译（需已填专用 Key）；关闭或未填 Key 时跟随主会话模型",
+    "type": "bool",
+    "default": true
+  },
+  "translation_max_output_tokens": {
+    "description": "独立 API 翻译输出上限，默认 4096，独立于判题输出上限",
+    "type": "int",
+    "default": 4096
+  },
+  "chat_provider": {
+    "description": "旧版兼容字段，新版普通提示完全在本地生成",
+    "type": "string",
+    "default": ""
+  },
+  "translate": {
+    "description": "生成精简中文题面（默认开启）；使用主对话模型，独立于专用判题 API",
+    "type": "bool",
+    "default": true
+  },
+  "judge_only": {
+    "description": "普通聊天不调用模型；翻译由 translate 独立控制，专用判题 API 仅用于 submit",
+    "type": "bool",
+    "default": true
+  },
+  "judge_two_stage": {
+    "description": "两次判题模型请求；默认关闭，使用一次 JSON 请求省 token",
+    "type": "bool",
+    "default": false
+  },
+  "api_base_url": {
+    "description": "本插件独立判题 API 地址（OpenAI 兼容，通常以 /v1 结尾）",
+    "type": "string",
+    "default": "https://api.openai.com/v1"
+  },
+  "api_key": {
+    "description": "专用 API Key；留空使用当前会话主模型。仅 submit 调用，请勿发到 QQ",
+    "type": "string",
+    "default": "",
+    "hint": "password"
+  },
+  "api_model": {
+    "description": "独立判题模型 ID，默认 gpt-6.1-sol；须与 API 服务商支持的名称一致",
+    "type": "string",
+    "default": "gpt-6.1-sol"
+  },
+  "api_proxy": {
+    "description": "仅独立 API 使用的代理地址；按需填 http://127.0.0.1:7897，留空直连",
+    "type": "string",
+    "default": ""
+  },
+  "api_max_output_tokens": {
+    "description": "判题输出上限（含推理 token），默认 2048，可按需要增加",
+    "type": "int",
+    "default": 2048
+  },
+  "api_reasoning_effort": {
+    "description": "判题推理强度，默认 low 节省 token；low/medium/high/xhigh/max",
+    "type": "string",
+    "default": "low"
+  },
+  "reuse_identical_submissions": {
+    "description": "同用户同一回合重复提交相同内容且模型未变时复用上次 AC/WA，不再花 token",
+    "type": "bool",
+    "default": true
+  },
+  "default_platform": {
+    "description": "未指定平台的 new 默认使用 cf，可设 cf 或 at",
+    "type": "string",
+    "default": "cf"
+  },
+  "default_low": {
+    "description": "默认 new 最低难度，初始 1400；最低为 0；CF 未评级题按 0 筛选",
+    "type": "int",
+    "default": 1400
+  },
+  "default_high": {
+    "description": "默认 new 最高难度，初始 1800",
+    "type": "int",
+    "default": 1800
+  },
+  "difficulty_mode": {
+    "description": "fixed=默认固定范围；adaptive=旧版按活跃用户 Rating 抽样",
+    "type": "string",
+    "default": "fixed"
+  },
+  "group_defaults": {
+    "description": "群默认值列表：平台ID:GroupMessage:群号|cf|1400-1800；群内 /kh setdefault 可持久化覆盖",
+    "type": "list",
+    "default": []
+  },
+  "background_download": {
+    "description": "启用空闲时 CF / AtCoder 自动补库；下载不调用模型",
+    "type": "bool",
+    "default": true
+  },
+  "group_prefetch": {
+    "description": "为所有已接入口胡的群提前准备一题（含中文翻译和双图）；无参数 new 优先消费，默认开启",
+    "type": "bool",
+    "default": true
+  },
+  "prefetch_interval": {
+    "description": "预备题巡检/失败重试间隔秒数，默认60，15..3600；准备成功后不重复调用模型",
+    "type": "int",
+    "default": 60
+  },
+  "download_proxy": {
+    "description": "仅题库下载使用的 HTTP 代理；与 api_proxy 和系统聊天代理相互独立。按需填 http://127.0.0.1:7897",
+    "type": "string",
+    "default": ""
+  },
+  "idle_seconds": {
+    "description": "最近一次口胡操作后空闲多少秒才下载，默认 180",
+    "type": "int",
+    "default": 180
+  },
+  "download_interval": {
+    "description": "每轮后台补库的间隔秒数，默认 60",
+    "type": "int",
+    "default": 60
+  },
+  "download_batch_size": {
+    "description": "每页归档下载题目数，1..50；页缓存和进度持久化，不重复请求已下载页",
+    "type": "int",
+    "default": 20
+  },
+  "download_low": {
+    "description": "后台补库最低 CF 难度，默认 0（包括未评级题）",
+    "type": "int",
+    "default": 0
+  },
+  "download_high": {
+    "description": "后台补库最高 CF 难度，默认 3500",
+    "type": "int",
+    "default": 3500
+  },
+  "metadata_ttl_hours": {
+    "description": "CF 官方题目元数据缓存小时数；API 出错可使用旧快照",
+    "type": "int",
+    "default": 24
+  },
+  "download_retry_hours": {
+    "description": "失败题目的重试退避小时数，默认 24",
+    "type": "int",
+    "default": 24
+  },
+  "archive_fallback": {
+    "description": "CF 正文站不可用时允许 Open R1 原作者题解归档，记录来源与固定版本，核对官方题目 ID/标题/难度",
+    "type": "bool",
+    "default": true
+  },
+  "compact_layout": {
+    "description": "手机精简排版：白底、少装饰、大字体，保留完整题意/约束/输入输出/样例",
+    "type": "bool",
+    "default": true
+  },
+  "timeout": {
+    "description": "timeout",
+    "type": "int",
+    "default": 90
+  },
+  "retries": {
+    "description": "retries",
+    "type": "int",
+    "default": 0
+  },
+  "max_submission_chars": {
+    "description": "max_submission_chars",
+    "type": "int",
+    "default": 100000
+  },
+  "max_history_chars": {
+    "description": "超限返回 UNCERTAIN，绝不静默截断判题历史",
+    "type": "int",
+    "default": 48000
+  },
+  "max_parallel_judges": {
+    "description": "max_parallel_judges",
+    "type": "int",
+    "default": 3
+  },
+  "ac_confidence": {
+    "description": "AC 最低置信度，且三个正确性字段必须全为真",
+    "type": "float",
+    "default": 0.85
+  },
+  "wa_feedback_chars": {
+    "description": "WA 反馈总字数上限（含可验证的样例反例），默认 120，范围 60..240",
+    "type": "int",
+    "default": 120
+  },
+  "record_practice": {
+    "description": "首杀以后保留个人练习 AC，不加分",
+    "type": "bool",
+    "default": true
+  },
+  "dedup": {
+    "description": "去重策略：user_and_room / user / room / none",
+    "type": "string",
+    "default": "user_and_room"
+  },
+  "activity_hours": {
+    "description": "activity_hours",
+    "type": "int",
+    "default": 6
+  },
+  "zero_weight": {
+    "description": "zero_weight",
+    "type": "float",
+    "default": 0.2
+  },
+  "solve_weight": {
+    "description": "solve_weight",
+    "type": "float",
+    "default": 1
+  },
+  "initiator_bonus": {
+    "description": "initiator_bonus",
+    "type": "float",
+    "default": 1.25
+  },
+  "difficulty_scale": {
+    "description": "difficulty_scale",
+    "type": "int",
+    "default": 260
+  },
+  "difficulty_window": {
+    "description": "difficulty_window",
+    "type": "int",
+    "default": 400
+  },
+  "recent_penalty": {
+    "description": "recent_penalty",
+    "type": "float",
+    "default": 0.25
+  },
+  "at_scale": {
+    "description": "AtCoder 到 CF 线性近似倍率，不代表原版公式",
+    "type": "float",
+    "default": 1
+  },
+  "at_offset": {
+    "description": "AtCoder 到 CF 线性近似偏移，不代表原版公式",
+    "type": "int",
+    "default": 400
+  },
+  "rating_version": {
+    "description": "评分策略版本号，修改参数后请同步更改并由管理员重算",
+    "type": "string",
+    "default": "approx-v1"
+  },
+  "rating_k": {
+    "description": "rating_k",
+    "type": "int",
+    "default": 100
+  },
+  "rating_decay": {
+    "description": "rating_decay",
+    "type": "float",
+    "default": 0.25
+  },
+  "rating_floor": {
+    "description": "rating_floor",
+    "type": "int",
+    "default": 5
+  },
+  "first_coefficient": {
+    "description": "first_coefficient",
+    "type": "float",
+    "default": 0.75
+  },
+  "first_offset": {
+    "description": "first_offset",
+    "type": "int",
+    "default": 340
+  },
+  "import_paths": {
+    "description": "本地已核验题库 JSON 绝对路径列表",
+    "type": "list",
+    "default": []
+  },
+  "browser_path": {
+    "description": "Chromium 或 Edge 可执行文件绝对路径，留空用 Playwright 浏览器",
+    "type": "string",
+    "default": ""
+  },
+  "browser_channel": {
+    "description": "可选 msedge 或 chrome",
+    "type": "string",
+    "default": ""
+  },
+  "font_path": {
+    "description": "中文字体绝对路径，Linux 须安装 Noto Sans CJK",
+    "type": "string",
+    "default": ""
+  },
+  "image_page_height": {
+    "description": "长图安全分页高度，默认14000",
+    "type": "int",
+    "default": 14000
+  },
+  "translation_version": {
+    "description": "translation_version",
+    "type": "string",
+    "default": "zh-compact-v2"
+  },
+  "render_version": {
+    "description": "render_version",
+    "type": "string",
+    "default": "hidden-rating-math-v5"
+  },
+  "avatar_ttl_hours": {
+    "description": "avatar_ttl_hours",
+    "type": "int",
+    "default": 24
+  },
+  "background_at_download": {
+    "description": "同时自动扫描 AtCoder 官方题解题；受空闲补库总开关控制，保存扫描进度",
+    "type": "bool",
+    "default": true
+  },
+  "at_download_batch_size": {
+    "description": "每轮 AtCoder 最多尝试的新题数，1..10，默认3；缺题解/缺难度跳过，失败退避",
+    "type": "int",
+    "default": 3
+  }
+}
